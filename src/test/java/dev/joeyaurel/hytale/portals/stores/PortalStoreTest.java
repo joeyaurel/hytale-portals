@@ -288,9 +288,9 @@ class PortalStoreTest {
     private PortalBound createBound(int x, int y, int z) {
         PortalBound bound = new PortalBound();
         bound.setId(UUID.randomUUID());
-        bound.setLocationX(x);
-        bound.setLocationY(y);
-        bound.setLocationZ(z);
+        bound.setX(x);
+        bound.setY(y);
+        bound.setZ(z);
         return bound;
     }
 }

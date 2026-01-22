@@ -77,12 +77,12 @@ public class PortalStore {
         }
 
         // Get min and max coordinates from all bounds
-        int minX = bounds.stream().mapToInt(PortalBound::getLocationX).min().orElse(Integer.MAX_VALUE);
-        int maxX = bounds.stream().mapToInt(PortalBound::getLocationX).max().orElse(Integer.MIN_VALUE);
-        int minY = bounds.stream().mapToInt(PortalBound::getLocationY).min().orElse(Integer.MAX_VALUE);
-        int maxY = bounds.stream().mapToInt(PortalBound::getLocationY).max().orElse(Integer.MIN_VALUE);
-        int minZ = bounds.stream().mapToInt(PortalBound::getLocationZ).min().orElse(Integer.MAX_VALUE);
-        int maxZ = bounds.stream().mapToInt(PortalBound::getLocationZ).max().orElse(Integer.MIN_VALUE);
+        int minX = bounds.stream().mapToInt(PortalBound::getX).min().orElse(Integer.MAX_VALUE);
+        int maxX = bounds.stream().mapToInt(PortalBound::getX).max().orElse(Integer.MIN_VALUE);
+        int minY = bounds.stream().mapToInt(PortalBound::getY).min().orElse(Integer.MAX_VALUE);
+        int maxY = bounds.stream().mapToInt(PortalBound::getY).max().orElse(Integer.MIN_VALUE);
+        int minZ = bounds.stream().mapToInt(PortalBound::getZ).min().orElse(Integer.MAX_VALUE);
+        int maxZ = bounds.stream().mapToInt(PortalBound::getZ).max().orElse(Integer.MIN_VALUE);
 
         // Check if the location is within the bounds
         return x >= minX && x <= maxX &&

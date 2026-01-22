@@ -69,9 +69,9 @@ public class Database {
             statement.execute("CREATE TABLE IF NOT EXISTS portal_bounds (" +
                     "id TEXT PRIMARY KEY," +
                     "portal_id TEXT NOT NULL," +
-                    "location_x INTEGER NOT NULL," +
-                    "location_y INTEGER NOT NULL," +
-                    "location_z INTEGER NOT NULL," +
+                    "x INTEGER NOT NULL," +
+                    "y INTEGER NOT NULL," +
+                    "z INTEGER NOT NULL," +
                     "FOREIGN KEY (portal_id) REFERENCES portals(id) ON DELETE CASCADE" +
                     ")");
 

@@ -5,9 +5,9 @@ import java.util.UUID;
 public class PortalBound {
     private UUID id;
     private UUID portalId;
-    private int locationX;
-    private int locationY;
-    private int locationZ;
+    private int x;
+    private int y;
+    private int z;
 
     public UUID getId() {
         return id;
@@ -29,27 +29,27 @@ public class PortalBound {
         this.portalId = portalId;
     }
 
-    public int getLocationX() {
-        return locationX;
+    public int getX() {
+        return x;
     }
 
-    public void setLocationX(int locationX) {
-        this.locationX = locationX;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public int getLocationY() {
-        return locationY;
+    public int getY() {
+        return y;
     }
 
-    public void setLocationY(int locationY) {
-        this.locationY = locationY;
+    public void setY(int y) {
+        this.y = y;
     }
 
-    public int getLocationZ() {
-        return locationZ;
+    public int getZ() {
+        return z;
     }
 
-    public void setLocationZ(int locationZ) {
-        this.locationZ = locationZ;
+    public void setZ(int z) {
+        this.z = z;
     }
 }
