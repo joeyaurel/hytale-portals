@@ -1,10 +1,10 @@
-package dev.joeyaurel.hytale.portals.repositories;
+package dev.joeyaurel.hytale.portals.database.repositories;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.database.Database;
-import dev.joeyaurel.hytale.portals.entities.Network;
+import dev.joeyaurel.hytale.portals.database.entities.Network;
 
 import java.util.ArrayList;
 import java.util.List;

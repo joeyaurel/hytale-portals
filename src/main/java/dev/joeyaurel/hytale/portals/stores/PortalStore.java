@@ -1,8 +1,8 @@
 package dev.joeyaurel.hytale.portals.stores;
 
-import dev.joeyaurel.hytale.portals.entities.Portal;
-import dev.joeyaurel.hytale.portals.entities.PortalBound;
-import dev.joeyaurel.hytale.portals.repositories.PortalRepository;
+import dev.joeyaurel.hytale.portals.database.entities.Portal;
+import dev.joeyaurel.hytale.portals.database.entities.PortalBound;
+import dev.joeyaurel.hytale.portals.database.repositories.PortalRepository;
 
 import java.util.ArrayList;
 import java.util.List;

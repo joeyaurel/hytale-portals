@@ -1,7 +1,7 @@
 package dev.joeyaurel.hytale.portals.stores;
 
-import dev.joeyaurel.hytale.portals.entities.Portal;
-import dev.joeyaurel.hytale.portals.entities.PortalBound;
+import dev.joeyaurel.hytale.portals.database.entities.Portal;
+import dev.joeyaurel.hytale.portals.database.entities.PortalBound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

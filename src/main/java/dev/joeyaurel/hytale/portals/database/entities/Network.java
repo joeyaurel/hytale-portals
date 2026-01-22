@@ -1,4 +1,4 @@
-package dev.joeyaurel.hytale.portals.entities;
+package dev.joeyaurel.hytale.portals.database.entities;
 
 import java.util.Date;
 import java.util.UUID;

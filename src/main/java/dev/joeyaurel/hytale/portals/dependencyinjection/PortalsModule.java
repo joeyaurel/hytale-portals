@@ -8,7 +8,7 @@ import dev.joeyaurel.hytale.portals.commands.PortalCommand;
 import dev.joeyaurel.hytale.portals.commands.portal.PortalCreateCommand;
 import dev.joeyaurel.hytale.portals.config.PortalsConfig;
 import dev.joeyaurel.hytale.portals.database.Database;
-import dev.joeyaurel.hytale.portals.repositories.NetworkRepository;
+import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
 import dev.joeyaurel.hytale.portals.stores.NetworkStore;
 
 public class PortalsModule extends AbstractModule {
