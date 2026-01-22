@@ -24,17 +24,18 @@ ext {
             }
         }
 
-        if (project.hasProperty('hytaleHome')) {
+        if (hytaleHome != null) {
             hytaleHome += "/install/$patchline/package/game/latest/Server"
         }
     }
 }
 
-if (!project.hasProperty('hytaleHome')) {
+if (project.hasProperty('hytale_home')) {
+    if (!file(hytaleHome).exists()) {
+        throw new GradleException("Failed to find Hytale at the specified hytale_home: $hytaleHome")
+    }
+} else if (hytaleHome == null || !file(hytaleHome).exists()) {
     hytaleHome = "./server"
-}
-else if (!file(project.findProperty('hytaleHome')).exists()) {
-    throw new GradleException("Failed to find Hytale at the expected location. Please make sure you have installed the game. The expected location can be changed using the hytale_home property. Currently looking in ${project.findProperty('hytaleHome')}")
 }
 
 java {
