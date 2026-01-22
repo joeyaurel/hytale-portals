@@ -10,8 +10,12 @@
     ],
     "Website": "https://github.com/joeyaurel/hytale-portals",
     "ServerVersion": "*",
-    "Dependencies": {},
-    "OptionalDependencies": {},
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        
+    },
     "DisabledByDefault": false,
     "Main": "dev.joeyaurel.hytale.portals.PortalsPlugin",
     "IncludesAssetPack": true
