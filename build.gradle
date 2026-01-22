@@ -23,11 +23,15 @@ ext {
                 hytaleHome = "${System.getProperty("user.home")}/.local/share/Hytale"
             }
         }
+
+        if (project.hasProperty('hytaleHome')) {
+            hytaleHome += "/install/$patchline/package/game/latest/Server"
+        }
     }
 }
 
 if (!project.hasProperty('hytaleHome')) {
-    throw new GradleException('Your Hytale install could not be detected automatically. If you are on an unsupported platform or using a custom install location, please define the install location using the hytale_home property.');
+    hytaleHome = "./server"
 }
 else if (!file(project.findProperty('hytaleHome')).exists()) {
     throw new GradleException("Failed to find Hytale at the expected location. Please make sure you have installed the game. The expected location can be changed using the hytale_home property. Currently looking in ${project.findProperty('hytaleHome')}")
@@ -51,8 +55,8 @@ repositories {
 dependencies {
     // Adds the Hytale server as a build dependency, allowing you to reference and
     // compile against their code. This requires you to have Hytale installed using
-    // the official launcher for now.
-    implementation(files("$hytaleHome/install/$patchline/package/game/latest/Server/HytaleServer.jar"))
+    // the official launcher for now or using the script from `CONTRIBUTING.md`.
+    implementation files("$hytaleHome/HytaleServer.jar")
     implementation 'com.google.inject:guice:7.0.0'
     implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
 

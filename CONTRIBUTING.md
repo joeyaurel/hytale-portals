@@ -11,9 +11,23 @@ to generate changelogs. Please make sure to follow the convention when committin
 
 Please ensure all the requirements are met before getting started.
 
-1. Download Hytale using the official launcher.
+1. Download the latest `HytaleServer.jar`. See below for a script to do this.
 2. Have Intellij IDEA installed. Community edition is fine.
 3. Download Java 25 and set it as the SDK in IDEA.
+
+## Downloading the latest HytaleServer.jar
+
+Have Docker installed and run the following command in the root of the project:
+
+```shell
+docker run --rm -it -v "$(pwd)/server:/app/server" alpine:latest sh -c "\
+    apk add --no-cache curl unzip libc6-compat && \
+    curl -L -o hytale-downloader.zip https://downloader.hytale.com/hytale-downloader.zip && \
+    unzip hytale-downloader.zip && \
+    chmod +x hytale-downloader-linux-amd64 && \
+    ./hytale-downloader-linux-amd64 -download-path server.zip && \
+    unzip -p server.zip Server/HytaleServer.jar >/app/server/HytaleServer.jar"
+```
 
 ## Manifest file
 

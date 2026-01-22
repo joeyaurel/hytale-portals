@@ -24,8 +24,6 @@ jobs:
 
     - name: Run tests
       run: ./gradlew test
-      env:
-        HYTALE_HOME: ${{ github.workspace }}/test-hytale-home
 
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2.22.0
