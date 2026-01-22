@@ -1,8 +1,6 @@
-package dev.joeyaurel.hytale.portals.stores;
+package dev.joeyaurel.hytale.portals.database.entities;
 
-import dev.joeyaurel.hytale.portals.database.entities.Portal;
-import dev.joeyaurel.hytale.portals.database.entities.PortalBound;
-import org.junit.jupiter.api.BeforeEach;
+import dev.joeyaurel.hytale.portals.geometry.Vector;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,26 +14,19 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("PortalStore")
-class PortalStoreTest {
-
-    private PortalStore portalStore;
-
-    @BeforeEach
-    void setUp() {
-        portalStore = new PortalStore(null);
-    }
+@DisplayName("Portal")
+class PortalTest {
 
     @Nested
-    @DisplayName("isLocationInPortalBounds")
-    class IsLocationInPortalBoundsTest {
+    @DisplayName("isInside")
+    class IsInside {
 
         @Test
         @DisplayName("should return false when portal has no bounds")
         void testNoBounds() {
             Portal portal = createPortal(new ArrayList<>());
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 0, 0, 0);
+            boolean result = portal.isInside(new Vector(0, 0, 0));
 
             assertFalse(result);
         }
@@ -48,7 +39,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 0, 0, 0);
+            boolean result = portal.isInside(new Vector(0, 0, 0));
 
             assertFalse(result);
         }
@@ -62,7 +53,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 0, 0, 0);
+            boolean result = portal.isInside(new Vector(0, 0, 0));
 
             assertTrue(result);
         }
@@ -76,7 +67,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 10, 10, 10);
+            boolean result = portal.isInside(new Vector(10, 10, 10));
 
             assertTrue(result);
         }
@@ -90,7 +81,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 5, 5, 5);
+            boolean result = portal.isInside(new Vector(5, 5, 5));
 
             assertTrue(result);
         }
@@ -104,7 +95,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            boolean result = portalStore.isLocationInPortalBounds(portal, 5.5, 7.3, 2.8);
+            boolean result = portal.isInside(new Vector(5.5, 7.3, 2.8));
 
             assertTrue(result);
         }
@@ -118,8 +109,8 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertFalse(portalStore.isLocationInPortalBounds(portal, -1, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 11, 5, 5));
+            assertFalse(portal.isInside(new Vector(-1, 5, 5)));
+            assertFalse(portal.isInside(new Vector(11, 5, 5)));
         }
 
         @Test
@@ -131,8 +122,8 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, -1, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, 11, 5));
+            assertFalse(portal.isInside(new Vector(5, -1, 5)));
+            assertFalse(portal.isInside(new Vector(5, 11, 5)));
         }
 
         @Test
@@ -144,8 +135,8 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, 5, -1));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, 5, 11));
+            assertFalse(portal.isInside(new Vector(5, 5, -1)));
+            assertFalse(portal.isInside(new Vector(5, 5, 11)));
         }
 
         @Test
@@ -157,8 +148,8 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 10.1, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, -0.1, 5, 5));
+            assertFalse(portal.isInside(new Vector(10.1, 5, 5)));
+            assertFalse(portal.isInside(new Vector(-0.1, 5, 5)));
         }
 
         @Test
@@ -170,9 +161,9 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertTrue(portalStore.isLocationInPortalBounds(portal, -5, -5, -5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, -11, -5, -5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 1, -5, -5));
+            assertTrue(portal.isInside(new Vector(-5, -5, -5)));
+            assertFalse(portal.isInside(new Vector(-11, -5, -5)));
+            assertFalse(portal.isInside(new Vector(1, -5, -5)));
         }
 
         @Test
@@ -184,10 +175,10 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 0, 0, 0));
-            assertTrue(portalStore.isLocationInPortalBounds(portal, -5, -5, -5));
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 5, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 6, 0, 0));
+            assertTrue(portal.isInside(new Vector(0, 0, 0)));
+            assertTrue(portal.isInside(new Vector(-5, -5, -5)));
+            assertTrue(portal.isInside(new Vector(5, 5, 5)));
+            assertFalse(portal.isInside(new Vector(6, 0, 0)));
         }
 
         @Test
@@ -202,10 +193,10 @@ class PortalStoreTest {
             Portal portal = createPortal(bounds);
 
             // The bounding box should be from (0,0,0) to (10,10,10)
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 5, 5, 5));
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 0, 0, 0));
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 10, 10, 10));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 11, 5, 5));
+            assertTrue(portal.isInside(new Vector(5, 5, 5)));
+            assertTrue(portal.isInside(new Vector(0, 0, 0)));
+            assertTrue(portal.isInside(new Vector(10, 10, 10)));
+            assertFalse(portal.isInside(new Vector(11, 5, 5)));
         }
 
         @Test
@@ -217,8 +208,8 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 1500000, 1500000, 1500000));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 999999, 1500000, 1500000));
+            assertTrue(portal.isInside(new Vector(1500000, 1500000, 1500000)));
+            assertFalse(portal.isInside(new Vector(999999, 1500000, 1500000)));
         }
 
         @ParameterizedTest
@@ -241,7 +232,7 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertEquals(expected, portalStore.isLocationInPortalBounds(portal, x, y, z));
+            assertEquals(expected, portal.isInside(new Vector(x, y, z)));
         }
 
         @Test
@@ -253,9 +244,9 @@ class PortalStoreTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 5, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, -1, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 11, 5, 5));
+            assertTrue(portal.isInside(new Vector(5, 5, 5)));
+            assertFalse(portal.isInside(new Vector(-1, 5, 5)));
+            assertFalse(portal.isInside(new Vector(11, 5, 5)));
         }
 
         @Test
@@ -268,9 +259,9 @@ class PortalStoreTest {
             Portal portal = createPortal(bounds);
 
             // Y is constant at 5
-            assertTrue(portalStore.isLocationInPortalBounds(portal, 5, 5, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, 4, 5));
-            assertFalse(portalStore.isLocationInPortalBounds(portal, 5, 6, 5));
+            assertTrue(portal.isInside(new Vector(5, 5, 5)));
+            assertFalse(portal.isInside(new Vector(5, 4, 5)));
+            assertFalse(portal.isInside(new Vector(5, 6, 5)));
         }
     }
 

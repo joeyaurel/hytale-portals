@@ -1,5 +1,7 @@
 package dev.joeyaurel.hytale.portals.database.entities;
 
+import dev.joeyaurel.hytale.portals.geometry.Vector;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,9 @@ public class Portal {
     private PortalDestination destination;
     private UUID createdBy;
     private Date createdAt;
+
+    private boolean boundsCalculated = false;
+    private double minX, maxX, minY, maxY, minZ, maxZ;
 
     public Portal() {
         bounds = new ArrayList<>();
@@ -94,5 +99,52 @@ public class Portal {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isInside(Vector location) {
+        if (!boundsCalculated) {
+            calculateBounds();
+        }
+
+        if (!boundsCalculated) {
+            return false;
+        }
+
+        double x = location.x();
+        double y = location.y();
+        double z = location.z();
+
+        return x >= minX && x <= maxX &&
+                y >= minY && y <= maxY &&
+                z >= minZ && z <= maxZ;
+    }
+
+    private void calculateBounds() {
+        if (bounds == null || bounds.size() < 2) {
+            boundsCalculated = false;
+            return;
+        }
+
+        minX = Double.MAX_VALUE;
+        maxX = Double.MIN_VALUE;
+        minY = Double.MAX_VALUE;
+        maxY = Double.MIN_VALUE;
+        minZ = Double.MAX_VALUE;
+        maxZ = Double.MIN_VALUE;
+
+        for (PortalBound bound : bounds) {
+            int x = bound.getX();
+            int y = bound.getY();
+            int z = bound.getZ();
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+            if (z < minZ) minZ = z;
+            if (z > maxZ) maxZ = z;
+        }
+
+        boundsCalculated = true;
     }
 }
