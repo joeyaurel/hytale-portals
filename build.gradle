@@ -41,8 +41,13 @@ if (project.hasProperty('hytale_home')) {
         throw new GradleException("Failed to find Hytale at the specified hytale_home: $hytaleHome")
     }
 } else if (hytaleHome == null || !file(hytaleHome).exists()) {
-    hytaleHome = "./server"
+    // Use HytaleServer.jar from the current directory as a fallback.
     hytaleBase = "."
+    hytaleHome = "${hytaleBase}/server"
+
+    println "Warning: Could not locate Hytale installation. Falling back to using ${hytaleHome}/HytaleServer.jar from the current directory."
+    println "If you have a copy of Hytale install it via the official way or consider specifying the 'hytale_home' project property to point to your custom installation."
+    println "Example: gradle build -Phytale_home=\"/path/to/Hytale/install/<patchline>/package/game/latest/Server\""
 }
 
 java {
