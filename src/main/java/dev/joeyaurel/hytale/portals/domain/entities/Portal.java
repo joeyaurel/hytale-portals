@@ -1,4 +1,4 @@
-package dev.joeyaurel.hytale.portals.database.entities;
+package dev.joeyaurel.hytale.portals.domain.entities;
 
 import dev.joeyaurel.hytale.portals.geometry.Vector;
 

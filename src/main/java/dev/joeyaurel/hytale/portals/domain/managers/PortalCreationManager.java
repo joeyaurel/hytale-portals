@@ -1,4 +1,4 @@
-package dev.joeyaurel.hytale.portals.managers;
+package dev.joeyaurel.hytale.portals.domain.managers;
 
 import java.util.List;
 import java.util.UUID;

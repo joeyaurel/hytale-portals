@@ -2,7 +2,7 @@ package dev.joeyaurel.hytale.portals.stores;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import dev.joeyaurel.hytale.portals.database.entities.Network;
+import dev.joeyaurel.hytale.portals.domain.entities.Network;
 import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
 
 import java.util.ArrayList;

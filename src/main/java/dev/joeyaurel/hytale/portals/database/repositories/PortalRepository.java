@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.database.Database;
-import dev.joeyaurel.hytale.portals.database.entities.Portal;
-import dev.joeyaurel.hytale.portals.database.entities.PortalBound;
+import dev.joeyaurel.hytale.portals.domain.entities.Portal;
+import dev.joeyaurel.hytale.portals.domain.entities.PortalBound;
 
 import java.util.ArrayList;
 import java.util.List;
