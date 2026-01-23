@@ -92,8 +92,10 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
+        UUID playerId = playerReference.getUuid();
+
         // Player is in a portal, so add them to the list
-        this.playersInPortal.add(playerReference.getUuid());
+        this.playersInPortal.add(playerId);
 
         Portal portal = optionalPortal.get();
 
@@ -125,7 +127,7 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
         );
 
         // Player no longer in portal
-        this.playersInPortal.remove(playerReference.getUuid());
+        this.playersInPortal.remove(playerId);
 
         playerReference.sendMessage(
                 Message.raw("Teleported to " + otherPortal.getName() + "!").color(Color.GREEN)
