@@ -8,6 +8,9 @@ import org.gradle.internal.os.OperatingSystem
 ext {
     if (project.hasProperty('hytale_home')) {
         hytaleHome = project.findProperty('hytale_home')
+        // Traverse up to the Hytale base directory
+        //                            latest/    game/      package/   $patchline/install/
+        //                            |          |          |          |          |
         hytaleBase = file(hytaleHome).parentFile.parentFile.parentFile.parentFile.parentFile.absolutePath
     }
     else {
