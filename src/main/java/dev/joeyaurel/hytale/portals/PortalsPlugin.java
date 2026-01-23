@@ -15,15 +15,40 @@ import javax.annotation.Nonnull;
 public class PortalsPlugin extends JavaPlugin {
 
     private final HytaleLogger logger = HytaleLogger.forEnclosingClass();
+
+    private final String pluginName;
+    private final String pluginVersion;
+    private final Config<PortalsConfig> config;
+
     private final Injector injector;
 
     public PortalsPlugin(@Nonnull JavaPluginInit init) {
         super(init);
 
-        Config<PortalsConfig> config = this.withConfig(this.getName(), PortalsConfig.CODEC);
-        injector = Guice.createInjector(new PortalsModule(logger, config));
+        this.pluginName = this.getManifest().getName();
+        this.pluginVersion = this.getManifest().getVersion().toString();
+        this.config = this.withConfig(this.pluginName, PortalsConfig.CODEC);
 
-        logger.atInfo().log("Hello from " + this.getName() + " version " + this.getManifest().getVersion().toString());
+        PortalsModule module = new PortalsModule(this.logger, this);
+        this.injector = Guice.createInjector(module);
+
+        this.logger.atInfo().log("Hello from " + this.pluginName + " version " + this.pluginVersion + "!");
+    }
+
+    public String getPluginName() {
+        return pluginName;
+    }
+
+    public String getPluginVersion() {
+        return pluginVersion;
+    }
+
+    public Config<PortalsConfig> getConfig() {
+        return config;
+    }
+
+    public Injector getInjector() {
+        return injector;
     }
 
     @Override
