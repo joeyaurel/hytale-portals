@@ -8,24 +8,27 @@ import org.gradle.internal.os.OperatingSystem
 ext {
     if (project.hasProperty('hytale_home')) {
         hytaleHome = project.findProperty('hytale_home')
+        hytaleBase = file(hytaleHome).parentFile.parentFile.parentFile.parentFile.parentFile.absolutePath
     }
     else {
         def os = OperatingSystem.current()
+        def base = null
         if (os.isWindows()) {
-            hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+            base = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
         }
         else if (os.isMacOsX()) {
-            hytaleHome = "${System.getProperty("user.home")}/Library/Application Support/Hytale"
+            base = "${System.getProperty("user.home")}/Library/Application Support/Hytale"
         }
         else if (os.isLinux()) {
-            hytaleHome = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
-            if (!file(hytaleHome).exists()) {
-                hytaleHome = "${System.getProperty("user.home")}/.local/share/Hytale"
+            base = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
+            if (!file(base).exists()) {
+                base = "${System.getProperty("user.home")}/.local/share/Hytale"
             }
         }
 
-        if (hytaleHome != null) {
-            hytaleHome += "/install/$patchline/package/game/latest/Server"
+        if (base != null) {
+            hytaleBase = base
+            hytaleHome = "${hytaleBase}/install/$patchline/package/game/latest/Server"
         }
     }
 }
@@ -36,6 +39,7 @@ if (project.hasProperty('hytale_home')) {
     }
 } else if (hytaleHome == null || !file(hytaleHome).exists()) {
     hytaleHome = "./server"
+    hytaleBase = "."
 }
 
 java {
@@ -101,13 +105,13 @@ tasks.named('processResources') {
 }
 
 def createServerRunArguments(String srcDir) {
-    def programParameters = '--allow-op --disable-sentry --assets="' + "${hytaleHome}/install/$patchline/package/game/latest/Assets.zip" + '"'
+    def programParameters = '--allow-op --disable-sentry --assets="' + "${hytaleBase}/install/$patchline/package/game/latest/Assets.zip" + '"'
     def modPaths = []
     if (includes_pack.toBoolean()) {
         modPaths << srcDir
     }
     if (load_user_mods.toBoolean()) {
-        modPaths << "${hytaleHome}/UserData/Mods"
+        modPaths << "${hytaleBase}/UserData/Mods"
     }
     if (!modPaths.isEmpty()) {
         programParameters += ' --mods="' + modPaths.join(',') + '"'
