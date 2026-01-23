@@ -30,10 +30,10 @@ public class PortalsPlugin extends JavaPlugin {
     protected void setup() {
         logger.atInfo().log("Setting up plugin " + this.getName());
 
-        this.setupCommands();
+        this.registerCommands();
     }
 
-    private void setupCommands() {
+    private void registerCommands() {
         this.getCommandRegistry().registerCommand(this.injector.getInstance(PortalCommand.class));
     }
 }
