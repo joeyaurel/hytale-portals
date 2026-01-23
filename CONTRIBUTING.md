@@ -81,8 +81,9 @@ command from code like this. Make sure to remove the code after your server is
 authenticated.
 
 ```java
-    @Override
-    protected void start() {
-        CommandManager.get().handleCommand(ConsoleSender.INSTANCE, "auth login device");
-    }
+   @Override
+   protected void start() {
+      CommandManager.get().handleCommand(ConsoleSender.INSTANCE, "auth persistence Encrypted");
+      CommandManager.get().handleCommand(ConsoleSender.INSTANCE, "auth login device");
+   }
 ```
