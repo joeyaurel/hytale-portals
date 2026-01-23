@@ -42,19 +42,19 @@ public class PortalsModule extends AbstractModule {
     }
 
     private void bindDatabase() {
-        bind(Database.class).to(Database.class);
+        bind(Database.class).asEagerSingleton();
     }
 
     private void bindRepositories() {
-        bind(NetworkRepository.class).to(NetworkRepository.class);
+        bind(NetworkRepository.class).asEagerSingleton();
     }
 
     private void bindStores() {
-        bind(NetworkStore.class).to(NetworkStore.class);
+        bind(NetworkStore.class).asEagerSingleton();
     }
 
     private void bindCommands() {
-        bind(PortalCommand.class).to(PortalCommand.class);
-        bind(PortalCreateCommand.class).to(PortalCreateCommand.class);
+        bind(PortalCommand.class).asEagerSingleton();
+        bind(PortalCreateCommand.class).asEagerSingleton();
     }
 }
