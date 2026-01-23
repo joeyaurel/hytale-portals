@@ -1,5 +1,7 @@
 package dev.joeyaurel.hytale.portals.stores;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import dev.joeyaurel.hytale.portals.database.entities.Portal;
 import dev.joeyaurel.hytale.portals.database.entities.PortalBound;
 import dev.joeyaurel.hytale.portals.database.repositories.PortalRepository;
@@ -10,12 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Singleton
 public class PortalStore {
 
     private final PortalRepository portalRepository;
 
     private List<Portal> cachedPortals;
 
+    @Inject
     public PortalStore(PortalRepository portalRepository) {
         this.portalRepository = portalRepository;
 
