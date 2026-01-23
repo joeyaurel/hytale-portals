@@ -11,8 +11,10 @@ to generate changelogs. Please make sure to follow the convention when committin
 
 Please ensure all the requirements are met before getting started.
 
-1. Download the latest `HytaleServer.jar`. See below for a script to do this.
-2. Have Intellij IDEA installed. Community edition is fine.
+1. Download Hytale using the official launcher, use the provided `HytaleServer.jar` from this repository
+   (see [build.gradle](build.gradle)) or download the latest `HytaleServer.jar`, if the server file is outdated.
+   See [Downloading the latest HytaleServer.jar](#downloading-the-latest-hytaleserverjar) for instructions.
+2. Have IntelliJ IDEA installed. Community edition is fine.
 3. Download Java 25 and set it as the SDK in IDEA.
 
 ## Downloading the latest HytaleServer.jar
