@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
@@ -31,12 +32,14 @@ import java.util.List;
 @Singleton
 public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
 
+    private final HytaleLogger logger;
     private final PortalStore portalStore;
 
     private final List<UUID> playersInPortal;
 
     @Inject
-    public EntryTickingSystem(PortalStore portalStore) {
+    public EntryTickingSystem(HytaleLogger logger, PortalStore portalStore) {
+        this.logger = logger;
         this.portalStore = portalStore;
 
         this.playersInPortal = new ArrayList<>();
@@ -99,9 +102,13 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
 
         Portal portal = optionalPortal.get();
 
+        this.logger.atFine().log("Player " + playerId + " is in portal " + portal.getId() + ".");
+
         List<Portal> otherNetworkPortals = this.portalStore.getPortalsInNetwork(portal.getNetworkId()).stream().filter(
                 predicate -> !predicate.getId().equals(portal.getId())
         ).toList();
+
+        this.logger.atFine().log("Found " + otherNetworkPortals.size() + " other portals in the network " + portal.getNetworkId() + ".");
 
         if (otherNetworkPortals.size() < 2) {
             playerReference.sendMessage(
@@ -114,6 +121,8 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
         // @TODO If there are more than one portal, give the player a GUI to choose which portal to teleport to
         Portal otherPortal = otherNetworkPortals.getFirst();
         PortalDestination portalDestination = portal.getDestination();
+
+        this.logger.atFine().log("Teleporting player to portal " + otherPortal.getId() + ".");
 
         // Teleport player to destination
         entityStore.putComponent(
@@ -132,5 +141,7 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
         playerReference.sendMessage(
                 Message.raw("Teleported to " + otherPortal.getName() + "!").color(Color.GREEN)
         );
+
+        this.logger.atFine().log("Player " + playerId + " has been teleported to portal " + otherPortal.getId() + ".");
     }
 }

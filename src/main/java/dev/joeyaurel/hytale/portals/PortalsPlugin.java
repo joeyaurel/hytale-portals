@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.util.Config;
 import dev.joeyaurel.hytale.portals.commands.PortalCommand;
 import dev.joeyaurel.hytale.portals.config.PortalsConfig;
 import dev.joeyaurel.hytale.portals.dependencyinjection.PortalsModule;
+import dev.joeyaurel.hytale.portals.systems.tick.EntryTickingSystem;
 
 import javax.annotation.Nonnull;
 
@@ -53,12 +54,27 @@ public class PortalsPlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
-        logger.atInfo().log("Setting up plugin " + this.getName());
+        this.logger.atInfo().log("Setting up plugin " + this.pluginName + " version " + this.pluginVersion + "...");
 
         this.registerCommands();
+        this.registerSystems();
+
+        this.logger.atInfo().log("Plugin " + this.pluginName + " setup successfully!");
     }
 
     private void registerCommands() {
+        this.logger.atFine().log("Registering commands...");
+
         this.getCommandRegistry().registerCommand(this.injector.getInstance(PortalCommand.class));
+
+        this.logger.atFine().log("Commands registered!");
+    }
+
+    private void registerSystems() {
+        this.logger.atFine().log("Registering systems...");
+
+        this.getEntityStoreRegistry().registerSystem(this.injector.getInstance(EntryTickingSystem.class));
+
+        this.logger.atFine().log("Systems registered!");
     }
 }
