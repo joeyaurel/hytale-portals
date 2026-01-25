@@ -1,6 +1,8 @@
 package dev.joeyaurel.hytale.portals.systems.tick;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -21,7 +23,6 @@ import dev.joeyaurel.hytale.portals.geometry.Vector;
 import dev.joeyaurel.hytale.portals.domain.entities.Portal;
 import dev.joeyaurel.hytale.portals.domain.entities.PortalDestination;
 import dev.joeyaurel.hytale.portals.stores.PortalStore;
-import jakarta.inject.Singleton;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 

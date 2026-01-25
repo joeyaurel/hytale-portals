@@ -1,13 +1,12 @@
 package dev.joeyaurel.hytale.portals;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
-import dev.joeyaurel.hytale.portals.commands.PortalCommand;
 import dev.joeyaurel.hytale.portals.config.PortalsConfig;
+import dev.joeyaurel.hytale.portals.dependencyinjection.DaggerPortalsComponent;
+import dev.joeyaurel.hytale.portals.dependencyinjection.PortalsComponent;
 import dev.joeyaurel.hytale.portals.dependencyinjection.PortalsModule;
 import dev.joeyaurel.hytale.portals.systems.tick.EntryTickingSystem;
 
@@ -21,7 +20,7 @@ public class PortalsPlugin extends JavaPlugin {
     private final String pluginVersion;
     private final Config<PortalsConfig> config;
 
-    private final Injector injector;
+    private final PortalsComponent component;
 
     public PortalsPlugin(@Nonnull JavaPluginInit init) {
         super(init);
@@ -30,8 +29,9 @@ public class PortalsPlugin extends JavaPlugin {
         this.pluginVersion = this.getManifest().getVersion().toString();
         this.config = this.withConfig(this.pluginName, PortalsConfig.CODEC);
 
-        PortalsModule module = new PortalsModule(this.logger, this);
-        this.injector = Guice.createInjector(module);
+        this.component = DaggerPortalsComponent.builder()
+                .portalsModule(new PortalsModule(this.logger, this))
+                .build();
 
         this.logger.atInfo().log("Hello from " + this.pluginName + " version " + this.pluginVersion + "!");
     }
@@ -48,33 +48,33 @@ public class PortalsPlugin extends JavaPlugin {
         return config;
     }
 
-    public Injector getInjector() {
-        return injector;
+    public PortalsComponent getComponent() {
+        return component;
     }
 
     @Override
     protected void setup() {
         this.logger.atInfo().log("Setting up plugin " + this.pluginName + " version " + this.pluginVersion + "...");
 
-        this.registerCommands();
         this.registerSystems();
+        this.registerCommands();
 
         this.logger.atInfo().log("Plugin " + this.pluginName + " setup successfully!");
-    }
-
-    private void registerCommands() {
-        this.logger.atFine().log("Registering commands...");
-
-        this.getCommandRegistry().registerCommand(this.injector.getInstance(PortalCommand.class));
-
-        this.logger.atFine().log("Commands registered!");
     }
 
     private void registerSystems() {
         this.logger.atFine().log("Registering systems...");
 
-        this.getEntityStoreRegistry().registerSystem(this.injector.getInstance(EntryTickingSystem.class));
+        // Events
+        //this.getEntityStoreRegistry().registerSystem(this.component.damageBlockEventSystem());
 
-        this.logger.atFine().log("Systems registered!");
+        // Ticks
+        this.getEntityStoreRegistry().registerSystem(this.component.entryTickingSystem());
+    }
+
+    private void registerCommands() {
+        this.logger.atFine().log("Registering commands...");
+
+        this.getCommandRegistry().registerCommand(this.component.portalCommand());
     }
 }

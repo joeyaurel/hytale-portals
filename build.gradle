@@ -70,7 +70,8 @@ dependencies {
     // compile against their code. This requires you to have Hytale installed using
     // the official launcher for now or using the script from `CONTRIBUTING.md`.
     implementation files("$hytaleHome/HytaleServer.jar")
-    implementation 'com.google.inject:guice:7.0.0'
+    implementation 'com.google.dagger:dagger:2.59'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.59'
     implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.0-M1'

@@ -1,11 +1,15 @@
 package dev.joeyaurel.hytale.portals.domain.managers;
 
 import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.UUID;
 
+@Singleton
 public class PortalCreationManager {
     private final List<UUID> playersCreatingPortals;
 
+    @Inject
     public PortalCreationManager() {
         playersCreatingPortals = List.of();
     }

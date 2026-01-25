@@ -1,15 +1,14 @@
 package dev.joeyaurel.hytale.portals.dependencyinjection;
 
-import com.google.inject.AbstractModule;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.PortalsPlugin;
-import dev.joeyaurel.hytale.portals.commands.PortalCommand;
-import dev.joeyaurel.hytale.portals.commands.portal.PortalCreateCommand;
-import dev.joeyaurel.hytale.portals.database.Database;
-import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
-import dev.joeyaurel.hytale.portals.stores.NetworkStore;
+import dagger.Module;
+import dagger.Provides;
 
-public class PortalsModule extends AbstractModule {
+import javax.inject.Singleton;
+
+@Module
+public class PortalsModule {
 
     private final HytaleLogger logger;
     private final PortalsPlugin plugin;
@@ -19,42 +18,15 @@ public class PortalsModule extends AbstractModule {
         this.plugin = plugin;
     }
 
-    @Override
-    protected void configure() {
-        this.logger.atFine().log("Binding dependencies...");
-
-        this.bindPlugin();
-        this.bindLogger();
-        this.bindDatabase();
-        this.bindRepositories();
-        this.bindStores();
-        this.bindCommands();
-
-        this.logger.atFine().log("Dependencies bound!");
+    @Provides
+    @Singleton
+    public HytaleLogger provideLogger() {
+        return this.logger;
     }
 
-    private void bindPlugin() {
-        this.bind(PortalsPlugin.class).toInstance(this.plugin);
-    }
-
-    private void bindLogger() {
-        this.bind(HytaleLogger.class).toInstance(this.logger);
-    }
-
-    private void bindDatabase() {
-        bind(Database.class).asEagerSingleton();
-    }
-
-    private void bindRepositories() {
-        bind(NetworkRepository.class).asEagerSingleton();
-    }
-
-    private void bindStores() {
-        bind(NetworkStore.class).asEagerSingleton();
-    }
-
-    private void bindCommands() {
-        bind(PortalCommand.class).asEagerSingleton();
-        bind(PortalCreateCommand.class).asEagerSingleton();
+    @Provides
+    @Singleton
+    public PortalsPlugin providePlugin() {
+        return this.plugin;
     }
 }

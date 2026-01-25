@@ -1,7 +1,7 @@
 package dev.joeyaurel.hytale.portals.commands;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -16,12 +16,16 @@ public class PortalCommand extends CommandBase {
     private final PortalsPlugin plugin;
 
     @Inject
-    public PortalCommand(PortalsPlugin plugin, PortalCreateCommand portalCreateCommand) {
+    public PortalCommand(
+            PortalsPlugin plugin,
+            PortalCreateCommand portalCreateCommand
+    ) {
         super("portal", "Prints basic infos for the " + plugin.getPluginName() + " plugin.");
 
         this.plugin = plugin;
 
         this.addAliases("portals");
+
         this.addSubCommand(portalCreateCommand);
     }
 

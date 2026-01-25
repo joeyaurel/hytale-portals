@@ -1,7 +1,7 @@
 package dev.joeyaurel.hytale.portals.database.repositories;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.database.Database;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
