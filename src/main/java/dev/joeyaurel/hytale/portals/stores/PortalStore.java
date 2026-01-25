@@ -3,8 +3,8 @@ package dev.joeyaurel.hytale.portals.stores;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import dev.joeyaurel.hytale.portals.domain.dto.PortalCreateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Portal;
-import dev.joeyaurel.hytale.portals.domain.entities.PortalBound;
 import dev.joeyaurel.hytale.portals.database.repositories.PortalRepository;
 import dev.joeyaurel.hytale.portals.geometry.Vector;
 
@@ -48,8 +48,8 @@ public class PortalStore {
                 .findFirst();
     }
 
-    public Portal createPortal(String name, UUID worldId, UUID networkId, List<PortalBound> bounds, UUID createdBy) {
-        var portal = this.portalRepository.createPortal(name, worldId, networkId, bounds, createdBy);
+    public Portal createPortal(PortalCreateDto portalCreateDto) {
+        Portal portal = this.portalRepository.createPortal(portalCreateDto);
 
         if (portal == null) {
             return null;

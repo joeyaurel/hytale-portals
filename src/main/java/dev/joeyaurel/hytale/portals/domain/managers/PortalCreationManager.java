@@ -1,28 +1,36 @@
 package dev.joeyaurel.hytale.portals.domain.managers;
 
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import dev.joeyaurel.hytale.portals.domain.dto.PortalCreateDto;
+
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 public class PortalCreationManager {
-    private final List<UUID> playersCreatingPortals;
+
+    private final Map<UUID, PortalCreateDto> portalCreateDtos;
 
     @Inject
     public PortalCreationManager() {
-        playersCreatingPortals = List.of();
+        this.portalCreateDtos = new ConcurrentHashMap<>();
     }
 
-    public void addPlayerCreatingPortal(UUID playerId) {
-        playersCreatingPortals.add(playerId);
+    public PortalCreateDto getPortalCreateDto(UUID playerId) {
+        return this.portalCreateDtos.getOrDefault(playerId, null);
     }
 
-    public void removePlayerCreatingPortal(UUID playerId) {
-        playersCreatingPortals.remove(playerId);
+    public void setPortalCreateDto(UUID playerId, PortalCreateDto portalCreateDto) {
+        this.portalCreateDtos.put(playerId, portalCreateDto);
+    }
+
+    public void removePortalCreateDto(UUID playerId) {
+        this.portalCreateDtos.remove(playerId);
     }
 
     public boolean isPlayerCreatingPortal(UUID playerId) {
-        return playersCreatingPortals.contains(playerId);
+        return this.portalCreateDtos.containsKey(playerId);
     }
 }

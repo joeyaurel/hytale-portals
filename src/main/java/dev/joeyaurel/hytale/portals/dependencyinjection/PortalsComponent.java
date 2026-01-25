@@ -3,6 +3,7 @@ package dev.joeyaurel.hytale.portals.dependencyinjection;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.PortalsPlugin;
 import dev.joeyaurel.hytale.portals.commands.PortalCommand;
+import dev.joeyaurel.hytale.portals.commands.portal.PortalCancelCommand;
 import dev.joeyaurel.hytale.portals.commands.portal.PortalCreateCommand;
 import dev.joeyaurel.hytale.portals.database.Database;
 import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
@@ -34,6 +35,7 @@ public interface PortalsComponent {
     // Commands
     PortalCommand portalCommand();
     PortalCreateCommand portalCreateCommand();
+    PortalCancelCommand portalCancelCommand();
 
     // Systems
     EntryTickingSystem entryTickingSystem();

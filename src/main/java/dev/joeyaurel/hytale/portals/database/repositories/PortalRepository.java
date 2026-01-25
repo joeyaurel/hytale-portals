@@ -4,8 +4,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.database.Database;
+import dev.joeyaurel.hytale.portals.domain.dto.PortalCreateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Portal;
-import dev.joeyaurel.hytale.portals.domain.entities.PortalBound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +30,14 @@ public class PortalRepository {
         return new ArrayList<>();
     }
 
-    public Portal createPortal(String name, UUID worldId, UUID networkId, List<PortalBound> bounds, UUID createdBy) {
+    public Portal createPortal(PortalCreateDto portalCreateDto) {
         // TODO
-        this.logger.at(Level.FINE).log("Creating portal with data name='" + name + "', worldId='" + worldId + "', networkId='" + networkId + "', bounds='" + bounds + "', createdBy='" + createdBy + "'...");
+        this.logger.at(Level.FINE).log("Creating portal with data name='" + portalCreateDto.name + "', worldId='" + portalCreateDto.worldId + "', networkId='" + portalCreateDto.networkId + "', bounds='" + portalCreateDto.bounds + "', createdBy='" + portalCreateDto.createdBy + "'...");
+
+        if (!portalCreateDto.isValid()) {
+            return null;
+        }
+
         return null;
     }
 
