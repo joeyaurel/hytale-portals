@@ -55,7 +55,7 @@ public class PortalsPlugin extends JavaPlugin {
     }
 
     @Override
-    protected void setup() {
+    protected void start() {
         this.logger.atInfo().log("Setting up plugin " + this.pluginName + " version " + this.pluginVersion + "...");
 
         this.registerSystems();
