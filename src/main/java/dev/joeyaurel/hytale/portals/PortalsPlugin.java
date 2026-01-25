@@ -58,6 +58,8 @@ public class PortalsPlugin extends JavaPlugin {
     protected void start() {
         this.logger.atInfo().log("Setting up plugin " + this.pluginName + " version " + this.pluginVersion + "...");
 
+        this.config.save();
+
         this.registerSystems();
         this.registerCommands();
 
