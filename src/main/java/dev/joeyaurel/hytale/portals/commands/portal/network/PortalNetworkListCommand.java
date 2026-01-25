@@ -41,6 +41,12 @@ public class PortalNetworkListCommand extends CommandBase {
         List<Network> networks = this.networkStore.getNetworks();
 
         sender.sendMessage(Message.raw("Portal Networks:").color(Color.GREEN));
+
+        if (networks.isEmpty()) {
+            sender.sendMessage(Message.raw("No networks found.").color(Color.YELLOW));
+            return;
+        }
+
         networks.forEach(network -> sender.sendMessage(Message.raw("> \"" + network.getName() + "\" (ID: " + network.getId() + ")")));
     }
 }
