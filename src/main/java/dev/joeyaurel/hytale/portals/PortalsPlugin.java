@@ -60,6 +60,10 @@ public class PortalsPlugin extends JavaPlugin {
 
         this.config.save();
 
+        // Uncomment the following when developing
+        //CommandManager.get().handleCommand(ConsoleSender.INSTANCE, "auth persistence Encrypted");
+        //CommandManager.get().handleCommand(ConsoleSender.INSTANCE, "auth login device");
+
         this.registerSystems();
         this.registerCommands();
 
