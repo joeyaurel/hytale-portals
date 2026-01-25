@@ -47,6 +47,14 @@ public class PortalNetworkCreateCommand extends CommandBase {
             return;
         }
 
+        String networkName = this.networkName.get(commandContext);
+        Network existingNetwork = this.networkStore.getNetworkByName(networkName);
+
+        if (existingNetwork != null) {
+            sender.sendMessage(Message.raw("A network with that name already exists. (ID: " + existingNetwork.getId() + ")").color(Color.RED));
+            return;
+        }
+
         UUID playerId = sender.getUuid();
 
         NetworkCreateDto networkCreateDto = new NetworkCreateDto();
