@@ -36,6 +36,8 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
     private final HytaleLogger logger;
     private final PortalStore portalStore;
 
+    private final Query<EntityStore> query;
+
     private final List<UUID> playersInPortal;
 
     @Inject
@@ -43,13 +45,9 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
         this.logger = logger;
         this.portalStore = portalStore;
 
-        this.playersInPortal = new ArrayList<>();
-    }
+        this.query = Query.and(Player.getComponentType());
 
-    @NullableDecl
-    @Override
-    public Query<EntityStore> getQuery() {
-        return PlayerRef.getComponentType();
+        this.playersInPortal = new ArrayList<>();
     }
 
     @Override
@@ -144,5 +142,11 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
         );
 
         this.logger.atFine().log("Player " + playerId + " has been teleported to portal " + otherPortal.getId() + ".");
+    }
+
+    @NullableDecl
+    @Override
+    public Query<EntityStore> getQuery() {
+        return this.query;
     }
 }
