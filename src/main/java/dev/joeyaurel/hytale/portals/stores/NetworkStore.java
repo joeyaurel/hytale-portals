@@ -2,6 +2,8 @@ package dev.joeyaurel.hytale.portals.stores;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import dev.joeyaurel.hytale.portals.domain.dto.NetworkCreateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
 import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
 
@@ -25,6 +27,14 @@ public class NetworkStore {
         this.cachedNetworks = new ArrayList<>();
     }
 
+    public Network getNetworkByName(String networkName) {
+        return this.getNetworks()
+                .stream()
+                .filter(network -> network.getName().equalsIgnoreCase(networkName))
+                .findFirst()
+                .orElse(null);
+    }
+
     public List<Network> getNetworks() {
         // Lazy load networks from the repository if not cached
         if (cachedNetworks.isEmpty()) {
@@ -34,8 +44,8 @@ public class NetworkStore {
         return cachedNetworks;
     }
 
-    public Network createNetwork(String name, UUID createdBy) {
-        var network = this.networkRepository.createNetwork(name, createdBy);
+    public Network createNetwork(NetworkCreateDto networkCreateDto) {
+        Network network = this.networkRepository.createNetwork(networkCreateDto);
 
         if (network == null) {
             return null;

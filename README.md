@@ -30,10 +30,10 @@ To start, you need to create a network that will house your portals:
 
 ## Commands
 
-- `/portal network create`: Create a new network.
+- `/portal network create <network-name>`: Create a new network.
 - `/portal network list`: List all existing networks.
+- `/portal network remove <network-name>`: Delete a network and its portals. Has to be confirmed with an optional `--confirm` flag.
 - `/portal network <network-name> list`: List all portals within a specific network.
-- `/portal network remove <network-name>`: Delete a network and its portals.
 - `/portal create <portal-name>`: Begin the creation of a new portal.
 - `/portal cancel`: Cancel the creation of a portal. (Uses the same permission as `/portal create <portal-name>`)
 - `/portal done`: Finalize the portal and set its exit point. (Uses the same permission as `/portal create <portal-name>`)
