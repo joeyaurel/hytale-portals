@@ -22,7 +22,7 @@ To start, you need to create a network that will house your portals:
 
 ### Creating a Portal
 
-1.  **Initialize:** Run `/portal create` to start the portal creation process.
+1.  **Initialize:** Run `/portal create <portal-name>` to start the portal creation process.
 2.  **Select Network:** Choose the network the portal should belong to.
 3.  **Name It:** Provide a unique name for your portal.
 4.  **Define Bounds:** Touch two blocks to define the portal's physical area. (Note: These blocks cannot be destroyed until the creation is finished).
@@ -34,8 +34,9 @@ To start, you need to create a network that will house your portals:
 - `/portal network list`: List all existing networks.
 - `/portal network <network-name> list`: List all portals within a specific network.
 - `/portal network remove <network-name>`: Delete a network and its portals.
-- `/portal create`: Begin the creation of a new portal.
-- `/portal done`: Finalize the portal and set its exit point.
+- `/portal create <portal-name>`: Begin the creation of a new portal.
+- `/portal cancel`: Cancel the creation of a portal. (Uses the same permission as `/portal create <portal-name>`)
+- `/portal done`: Finalize the portal and set its exit point. (Uses the same permission as `/portal create <portal-name>`)
 
 ## Contributing
 
