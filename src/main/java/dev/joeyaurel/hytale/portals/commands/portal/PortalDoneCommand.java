@@ -138,8 +138,8 @@ public class PortalDoneCommand extends AbstractAsyncCommand {
             double zCenter = Math.floor(position.z) + 0.5;
 
             portalCreateDto.destinationPosition = new Vector(xCenter, y, zCenter);
-            portalCreateDto.destinationBodyYaw = RotationUtils.clipRotation(bodyRotation.getYaw());
-            portalCreateDto.destinationHeadYaw = RotationUtils.clipRotation(headRotation.getYaw());
+            portalCreateDto.destinationBodyYaw = RotationUtils.snapRotation(bodyRotation.getYaw());
+            portalCreateDto.destinationHeadYaw = RotationUtils.snapRotation(headRotation.getYaw());
             portalCreateDto.destinationHeadPitch = 0f; // Maybe something to consider for a later time (`headRotation.getPitch()`)
 
             Portal portal = this.portalStore.createPortal(portalCreateDto);

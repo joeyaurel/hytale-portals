@@ -3,16 +3,16 @@ package dev.joeyaurel.hytale.portals.utils;
 public class RotationUtils {
 
     /**
-     * Clips the given rotation in radians to the nearest 45-degree increment (PI/4).
+     * Snaps the given rotation in radians to the nearest 45-degree increment (PI/4).
      * - North is 0.
      * - East is -1.570795 (-PI/2).
      * - West is 1.570795 (PI/2).
      * - South is 3.14159 or -3.14159 (PI or -PI).
      *
      * @param radians The rotation in radians.
-     * @return The clipped rotation in radians.
+     * @return The snapped rotation in radians.
      */
-    public static float clipRotation(float radians) {
+    public static float snapRotation(float radians) {
         float step = (float) (Math.PI / 4.0); // 45 degrees
         float snapped = Math.round(radians / step) * step;
 
