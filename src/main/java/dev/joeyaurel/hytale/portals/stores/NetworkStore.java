@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dev.joeyaurel.hytale.portals.domain.dto.NetworkCreateDto;
+import dev.joeyaurel.hytale.portals.domain.dto.NetworkUpdateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
 import dev.joeyaurel.hytale.portals.database.repositories.NetworkRepository;
 
@@ -25,6 +26,14 @@ public class NetworkStore {
         this.portalStore = portalStore;
 
         this.cachedNetworks = new ArrayList<>();
+    }
+
+    public Network getNetworkById(UUID networkId) {
+        return this.getNetworks()
+                .stream()
+                .filter(network -> network.getId().equals(networkId))
+                .findFirst()
+                .orElse(null);
     }
 
     public Network getNetworkByName(String networkName) {
@@ -52,6 +61,24 @@ public class NetworkStore {
         }
 
         this.cachedNetworks.add(network);
+
+        return network;
+    }
+
+    public Network updateNetwork(NetworkUpdateDto networkUpdateDto) {
+        Network network = this.networkRepository.updateNetwork(networkUpdateDto);
+
+        if (network == null) {
+            return null;
+        }
+
+        // Update cached network
+        for (int i = 0; i < this.cachedNetworks.size(); i++) {
+            if (this.cachedNetworks.get(i).getId().equals(network.getId())) {
+                this.cachedNetworks.set(i, network);
+                break;
+            }
+        }
 
         return network;
     }

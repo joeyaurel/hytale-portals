@@ -7,6 +7,7 @@ public class Permissions {
     // Network permissions
     public static final String NETWORK_LIST = "portals.network.list";
     public static final String NETWORK_CREATE = "portals.network.create";
+    public static final String NETWORK_UPDATE = "portals.network.update";
     public static final String NETWORK_DELETE = "portals.network.delete";
 
     // Portal permissions

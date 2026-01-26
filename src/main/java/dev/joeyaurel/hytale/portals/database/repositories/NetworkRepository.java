@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import com.hypixel.hytale.logger.HytaleLogger;
 import dev.joeyaurel.hytale.portals.database.Database;
 import dev.joeyaurel.hytale.portals.domain.dto.NetworkCreateDto;
+import dev.joeyaurel.hytale.portals.domain.dto.NetworkUpdateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
 
 import java.sql.Connection;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 @Singleton
 public class NetworkRepository {
@@ -34,6 +34,27 @@ public class NetworkRepository {
         this.logger = logger;
     }
 
+    public Network getNetworkById(UUID id) {
+        this.logger.atFine().log("Fetching network with id '" + id + "'...");
+
+        Connection connection = this.database.getConnection();
+        String sql = "SELECT id, name, created_by, created_at FROM networks WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id.toString());
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapToNetworkEntity(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            this.logger.atSevere().log("Error fetching network " + id + ": " + e.getMessage());
+        }
+
+        return null;
+    }
+
     public List<Network> listAllNetworks() {
         this.logger.atFine().log("Fetching networks from database...");
 
@@ -46,17 +67,7 @@ public class NetworkRepository {
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Network network = new Network();
-                network.setId(UUID.fromString(resultSet.getString("id")));
-                network.setName(resultSet.getString("name"));
-                network.setCreatedBy(UUID.fromString(resultSet.getString("created_by")));
-
-                try {
-                    network.setCreatedAt(this.dateFormat.parse(resultSet.getString("created_at")));
-                } catch (ParseException e) {
-                    this.logger.atSevere().log("Error parsing date for network " + network.getId() + ": " + e.getMessage());
-                }
-
+                Network network = mapToNetworkEntity(resultSet);
                 networks.add(network);
             }
         } catch (SQLException e) {
@@ -99,6 +110,24 @@ public class NetworkRepository {
         }
     }
 
+    public Network updateNetwork(NetworkUpdateDto networkUpdateDto) {
+        this.logger.atFine().log("Updating network with id '" + networkUpdateDto.id + "'...");
+
+        Connection connection = this.database.getConnection();
+        String sql = "UPDATE networks SET name = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, networkUpdateDto.name);
+            statement.setString(2, networkUpdateDto.id.toString());
+            statement.executeUpdate();
+
+            return this.getNetworkById(networkUpdateDto.id);
+        } catch (SQLException e) {
+            this.logger.atSevere().log("Error updating network " + networkUpdateDto.id + ": " + e.getMessage());
+            return null;
+        }
+    }
+
     public void deleteNetwork(UUID id) {
         this.logger.atFine().log("Deleting network with id '" + id + "'...");
 
@@ -113,8 +142,18 @@ public class NetworkRepository {
         }
     }
 
-    public void updateNetwork(Network network) {
-        // TODO
-        this.logger.at(Level.FINE).log("Updating network with id '" + network.getId() + "'...");
+    private Network mapToNetworkEntity(ResultSet resultSet) throws SQLException {
+        Network network = new Network();
+        network.setId(UUID.fromString(resultSet.getString("id")));
+        network.setName(resultSet.getString("name"));
+        network.setCreatedBy(UUID.fromString(resultSet.getString("created_by")));
+
+        try {
+            network.setCreatedAt(this.dateFormat.parse(resultSet.getString("created_at")));
+        } catch (ParseException e) {
+            this.logger.atSevere().log("Error parsing date for network " + network.getId() + ": " + e.getMessage());
+        }
+
+        return network;
     }
 }

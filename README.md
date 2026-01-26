@@ -32,6 +32,7 @@ To start, you need to create a network that will house your portals:
 
 - `/portal network create <network-name>`: Create a new network.
 - `/portal network list`: List all existing networks.
+- `/portal network edit <network-name>`: Edit an existing network.
 - `/portal network remove <network-name>`: Delete a network and its portals. Has to be confirmed with an optional `--confirm` flag.
 - `/portal network <network-name> list`: List all portals within a specific network.
 - `/portal create <portal-name>`: Begin the creation of a new portal.
