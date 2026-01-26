@@ -62,7 +62,7 @@ public class PortalNetworkCreateCommand extends CommandBase {
         UUID playerId = sender.getUuid();
 
         NetworkCreateDto networkCreateDto = new NetworkCreateDto();
-        networkCreateDto.name = this.networkName.get(commandContext);
+        networkCreateDto.name = networkName;
         networkCreateDto.createdBy = playerId;
 
         Network network = this.networkStore.createNetwork(networkCreateDto);
