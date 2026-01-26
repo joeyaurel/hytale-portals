@@ -48,6 +48,10 @@ public class PortalNetworkCreateCommand extends CommandBase {
         }
 
         String networkName = this.networkName.get(commandContext);
+
+        // Remove leading and trailing quotes
+        networkName = networkName.replaceAll("^\"|\"$", "");
+
         Network existingNetwork = this.networkStore.getNetworkByName(networkName);
 
         if (existingNetwork != null) {

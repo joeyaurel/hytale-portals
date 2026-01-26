@@ -47,6 +47,10 @@ public class PortalNetworkRemoveCommand extends CommandBase {
         }
 
         String networkName = this.networkName.get(commandContext);
+
+        // Remove leading and trailing quotes
+        networkName = networkName.replaceAll("^\"|\"$", "");
+
         boolean isConfirmed = this.confirm.get(commandContext);
 
         if (!isConfirmed) {
