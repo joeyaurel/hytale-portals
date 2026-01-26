@@ -51,17 +51,17 @@ public class PortalNetworkRemoveCommand extends CommandBase {
         // Remove leading and trailing quotes
         networkName = networkName.replaceAll("^\"|\"$", "");
 
-        boolean isConfirmed = this.confirm.get(commandContext);
-
-        if (!isConfirmed) {
-            sender.sendMessage(Message.raw("Are you sure you want to remove this network? Type `/portal network remove \"" + networkName + "\" --confirm` to confirm.").color(Color.RED));
-            return;
-        }
-
         Network network = this.networkStore.getNetworkByName(networkName);
 
         if (network == null) {
             sender.sendMessage(Message.raw("Network with name \"" + networkName + "\" not found.").color(Color.RED));
+            return;
+        }
+
+        boolean isConfirmed = this.confirm.get(commandContext);
+
+        if (!isConfirmed) {
+            sender.sendMessage(Message.raw("Are you sure you want to remove this network? Type `/portal network remove \"" + networkName + "\" --confirm` to confirm.").color(Color.RED));
             return;
         }
 
