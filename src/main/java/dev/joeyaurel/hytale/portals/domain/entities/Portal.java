@@ -114,9 +114,9 @@ public class Portal {
         double y = location.y();
         double z = location.z();
 
-        return x >= minX && x <= maxX &&
-                y >= minY && y <= maxY &&
-                z >= minZ && z <= maxZ;
+        return x >= minX && x < maxX + 1 &&
+                y >= minY && y < maxY + 1 &&
+                z >= minZ && z < maxZ + 1;
     }
 
     private void calculateBounds() {
@@ -125,12 +125,12 @@ public class Portal {
             return;
         }
 
-        minX = Double.MAX_VALUE;
-        maxX = Double.MIN_VALUE;
-        minY = Double.MAX_VALUE;
-        maxY = Double.MIN_VALUE;
-        minZ = Double.MAX_VALUE;
-        maxZ = Double.MIN_VALUE;
+        minX = Double.POSITIVE_INFINITY;
+        maxX = Double.NEGATIVE_INFINITY;
+        minY = Double.POSITIVE_INFINITY;
+        maxY = Double.NEGATIVE_INFINITY;
+        minZ = Double.POSITIVE_INFINITY;
+        maxZ = Double.NEGATIVE_INFINITY;
 
         for (PortalBound bound : bounds) {
             int x = bound.getX();

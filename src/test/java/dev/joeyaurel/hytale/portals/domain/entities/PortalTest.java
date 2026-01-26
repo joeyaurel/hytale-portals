@@ -148,7 +148,7 @@ class PortalTest {
             );
             Portal portal = createPortal(bounds);
 
-            assertFalse(portal.isInside(new Vector(10.1, 5, 5)));
+            assertFalse(portal.isInside(new Vector(11.1, 5, 5)));
             assertFalse(portal.isInside(new Vector(-0.1, 5, 5)));
         }
 
@@ -216,13 +216,14 @@ class PortalTest {
         @CsvSource({
             "0.0, 0.0, 0.0, true",
             "10.0, 10.0, 10.0, true",
+            "10.9, 10.9, 10.9, true",
             "5.5, 5.5, 5.5, true",
             "-0.1, 5.0, 5.0, false",
-            "10.1, 5.0, 5.0, false",
+            "11.1, 5.0, 5.0, false",
             "5.0, -0.1, 5.0, false",
-            "5.0, 10.1, 5.0, false",
+            "5.0, 11.1, 5.0, false",
             "5.0, 5.0, -0.1, false",
-            "5.0, 5.0, 10.1, false"
+            "5.0, 5.0, 11.1, false"
         })
         @DisplayName("should correctly validate various coordinates")
         void testParameterizedCoordinates(double x, double y, double z, boolean expected) {
@@ -262,6 +263,36 @@ class PortalTest {
             assertTrue(portal.isInside(new Vector(5, 5, 5)));
             assertFalse(portal.isInside(new Vector(5, 4, 5)));
             assertFalse(portal.isInside(new Vector(5, 6, 5)));
+        }
+
+        @Test
+        @DisplayName("should not return true when location is outside negative bounds (repro issue)")
+        void testReproductionIssue() {
+            List<PortalBound> bounds = Arrays.asList(
+                createBound(-511, 124, 282),
+                createBound(-511, 128, 278)
+            );
+            Portal portal = createPortal(bounds);
+
+            // Coordinates from the issue
+            Vector location = new Vector(-508.111, 125.408, 280.855);
+
+            assertFalse(portal.isInside(location), "Location -508.111 should be outside X range [-511, -511]");
+        }
+
+        @Test
+        @DisplayName("should return true when location is within block volume (repro issue)")
+        void testReproductionIssue2() {
+            List<PortalBound> bounds = Arrays.asList(
+                    createBound(-511, 124, 282),
+                    createBound(-511, 128, 278)
+            );
+            Portal portal = createPortal(bounds);
+
+            // Coordinates from the issue
+            Vector location = new Vector(-510.5, 125.0, 282.675);
+
+            assertTrue(portal.isInside(location), "Location -510.5 should be inside the block volume at X -511");
         }
     }
 
