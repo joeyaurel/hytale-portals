@@ -48,6 +48,10 @@ public class PortalStore {
                 .findFirst();
     }
 
+    public void removePortalsInNetwork(UUID networkId) {
+        cachedPortals.removeIf(portal -> portal.getNetworkId().equals(networkId));
+    }
+
     public Portal createPortal(PortalCreateDto portalCreateDto) {
         Portal portal = this.portalRepository.createPortal(portalCreateDto);
 

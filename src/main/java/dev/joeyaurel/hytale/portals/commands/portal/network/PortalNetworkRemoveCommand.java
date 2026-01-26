@@ -11,25 +11,32 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
 import dev.joeyaurel.hytale.portals.permissions.Permissions;
 import dev.joeyaurel.hytale.portals.stores.NetworkStore;
+import dev.joeyaurel.hytale.portals.stores.PortalStore;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
+import java.util.UUID;
 
 @Singleton
 public class PortalNetworkRemoveCommand extends CommandBase {
 
     private final NetworkStore networkStore;
+    private final PortalStore portalStore;
 
     private final RequiredArg<String> networkName;
     private final FlagArg confirm;
 
     @Inject
-    public PortalNetworkRemoveCommand(NetworkStore networkStore) {
+    public PortalNetworkRemoveCommand(
+            NetworkStore networkStore,
+            PortalStore portalStore
+    ) {
         super("remove", "Removes a network of portals.");
 
         this.networkStore = networkStore;
+        this.portalStore = portalStore;
 
         this.networkName = this.withRequiredArg("name", "Name of the network to remove.", ArgTypes.STRING);
         this.confirm = this.withFlagArg("confirm", "Confirm the removal of the network.");
@@ -65,7 +72,10 @@ public class PortalNetworkRemoveCommand extends CommandBase {
             return;
         }
 
-        this.networkStore.removeNetwork(network.getId());
+        UUID networkId = network.getId();
+
+        this.networkStore.removeNetwork(networkId);
+        this.portalStore.removePortalsInNetwork(networkId);
 
         sender.sendMessage(Message.raw("Network \"" + networkName + "\" has been removed.").color(Color.GREEN));
     }
