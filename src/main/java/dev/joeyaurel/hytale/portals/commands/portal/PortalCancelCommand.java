@@ -7,7 +7,7 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import dev.joeyaurel.hytale.portals.domain.managers.PortalCreationManager;
+import dev.joeyaurel.hytale.portals.managers.PortalCreationManager;
 import dev.joeyaurel.hytale.portals.permissions.Permissions;
 
 import javax.annotation.Nonnull;

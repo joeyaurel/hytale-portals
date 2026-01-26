@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.joeyaurel.hytale.portals.domain.managers.PortalCreationManager;
+import dev.joeyaurel.hytale.portals.managers.PortalCreationManager;
 import dev.joeyaurel.hytale.portals.permissions.Permissions;
 import dev.joeyaurel.hytale.portals.ui.pages.PortalCreatePage;
 

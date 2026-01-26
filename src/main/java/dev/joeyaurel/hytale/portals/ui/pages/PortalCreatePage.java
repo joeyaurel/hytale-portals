@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.joeyaurel.hytale.portals.domain.dto.PortalCreateDto;
 import dev.joeyaurel.hytale.portals.domain.entities.Network;
-import dev.joeyaurel.hytale.portals.domain.managers.PortalCreationManager;
+import dev.joeyaurel.hytale.portals.managers.PortalCreationManager;
 import dev.joeyaurel.hytale.portals.stores.NetworkStore;
 import org.jspecify.annotations.NonNull;
 
