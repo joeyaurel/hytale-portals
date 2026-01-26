@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.joeyaurel.hytale.portals.geometry.Vector;
@@ -109,39 +110,59 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
 
         this.logger.atFine().log("Found " + otherNetworkPortals.size() + " other portals in the network " + portal.getNetworkId() + ".");
 
-        if (otherNetworkPortals.size() < 2) {
+        if (otherNetworkPortals.isEmpty()) {
             playerReference.sendMessage(
                     Message.raw("You need at least two portals in your network to use this feature.").color(Color.RED)
             );
 
+            this.playersInPortal.remove(playerId);
             return;
         }
 
         // @TODO If there are more than one portal, give the player a GUI to choose which portal to teleport to
         Portal otherPortal = otherNetworkPortals.getFirst();
-        PortalDestination portalDestination = portal.getDestination();
+        PortalDestination portalDestination = otherPortal.getDestination();
 
-        this.logger.atFine().log("Teleporting player to portal " + otherPortal.getId() + ".");
+        this.logger.atFine().log("Teleporting player to portal " + otherPortal.getName() + " (ID: " + otherPortal.getId() + ").");
 
-        // Teleport player to destination
-        entityStore.putComponent(
-                reference,
-                Teleport.getComponentType(),
-                new Teleport(
-                        playerWorld,
-                        new Vector3d(portalDestination.getX(), portalDestination.getY(), portalDestination.getZ()),
-                        new Vector3f(portalDestination.getRotationX(), portalDestination.getRotationY(), portalDestination.getRotationZ())
-                )
-        );
+        Vector3d newPosition = new Vector3d(portalDestination.getX(), portalDestination.getY(), portalDestination.getZ());
 
-        // Player no longer in portal
-        this.playersInPortal.remove(playerId);
+        Vector3f newHeadRotation = new Vector3f(0, 0, 0);
+        newHeadRotation.setYaw(portalDestination.getHeadYaw());
+        newHeadRotation.setPitch(portalDestination.getHeadPitch());
 
-        playerReference.sendMessage(
-                Message.raw("Teleported to " + otherPortal.getName() + "!").color(Color.GREEN)
-        );
+        playerWorld.execute(() -> {
+            World destinationWorld = Universe.get().getWorld(otherPortal.getWorldId());
 
-        this.logger.atFine().log("Player " + playerId + " has been teleported to portal " + otherPortal.getId() + ".");
+            if (destinationWorld == null) {
+                playerReference.sendMessage(
+                        Message.raw("Destination world not found for portal " + otherPortal.getName()).color(Color.RED)
+                );
+
+                this.playersInPortal.remove(playerId);
+                return;
+            }
+
+            // Teleport player to destination
+            entityStore.putComponent(
+                    reference,
+                    Teleport.getComponentType(),
+                    Teleport.createForPlayer(
+                            destinationWorld,
+                            newPosition,
+                            newHeadRotation
+                    )
+            );
+
+            // Player no longer in the portal
+            this.playersInPortal.remove(playerId);
+
+            playerReference.sendMessage(
+                    Message.raw("Teleported to " + otherPortal.getName() + "!").color(Color.GREEN)
+            );
+
+            this.logger.atInfo().log("Player " + playerId + " has been teleported to portal " + otherPortal.getId() + ".");
+        });
     }
 
     @NullableDecl

@@ -8,9 +8,9 @@ public class PortalDestination {
     private double x;
     private double y;
     private double z;
-    private float rotationX;
-    private float rotationY;
-    private float rotationZ;
+    private float bodyYaw;
+    private float headYaw;
+    private float headPitch;
 
     public UUID getId() {
         return id;
@@ -56,27 +56,27 @@ public class PortalDestination {
         this.z = z;
     }
 
-    public float getRotationX() {
-        return rotationX;
+    public float getBodyYaw() {
+        return bodyYaw;
     }
 
-    public void setRotationX(float rotationX) {
-        this.rotationX = rotationX;
+    public void setBodyYaw(float bodyYaw) {
+        this.bodyYaw = bodyYaw;
     }
 
-    public float getRotationY() {
-        return rotationY;
+    public float getHeadYaw() {
+        return headYaw;
     }
 
-    public void setRotationY(float rotationY) {
-        this.rotationY = rotationY;
+    public void setHeadYaw(float headYaw) {
+        this.headYaw = headYaw;
     }
 
-    public float getRotationZ() {
-        return rotationZ;
+    public float getHeadPitch() {
+        return headPitch;
     }
 
-    public void setRotationZ(float rotationZ) {
-        this.rotationZ = rotationZ;
+    public void setHeadPitch(float headPitch) {
+        this.headPitch = headPitch;
     }
 }
