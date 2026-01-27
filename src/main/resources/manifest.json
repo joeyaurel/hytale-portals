@@ -1,7 +1,7 @@
 {
     "Group": "Portals",
     "Name": "PortalsPlugin",
-    "Version": "0.0.1",
+    "Version": "0.1.0",
     "Description": "Portal system for Hytale. Teleport to other worlds or points of interest.",
     "Authors": [
         {
@@ -10,12 +10,8 @@
     ],
     "Website": "https://github.com/joeyaurel/hytale-portals",
     "ServerVersion": "*",
-    "Dependencies": {
-        
-    },
-    "OptionalDependencies": {
-        
-    },
+    "Dependencies": {},
+    "OptionalDependencies": {},
     "DisabledByDefault": false,
     "Main": "dev.joeyaurel.hytale.portals.PortalsPlugin",
     "IncludesAssetPack": true
