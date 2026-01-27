@@ -12,43 +12,53 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.joeyaurel.hytale.portals.geometry.Vector;
 import dev.joeyaurel.hytale.portals.domain.entities.Portal;
-import dev.joeyaurel.hytale.portals.domain.entities.PortalDestination;
+import dev.joeyaurel.hytale.portals.managers.PortalTeleportationManager;
 import dev.joeyaurel.hytale.portals.stores.PortalStore;
+import dev.joeyaurel.hytale.portals.ui.pages.PortalTeleportPage;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
 
     private final HytaleLogger logger;
     private final PortalStore portalStore;
+    private final PortalTeleportPage portalTeleportPage;
+    private final PortalTeleportationManager portalTeleportationManager;
 
     private final Query<EntityStore> query;
 
-    private final List<UUID> playersInPortal;
+    private final Map<UUID, Long> playersInPortal;
+    private final Set<UUID> playersWithGuiOpen;
 
     @Inject
-    public EntryTickingSystem(HytaleLogger logger, PortalStore portalStore) {
+    public EntryTickingSystem(
+            HytaleLogger logger,
+            PortalStore portalStore,
+            PortalTeleportPage portalTeleportPage,
+            PortalTeleportationManager portalTeleportationManager
+    ) {
         this.logger = logger;
         this.portalStore = portalStore;
+        this.portalTeleportPage = portalTeleportPage;
+        this.portalTeleportationManager = portalTeleportationManager;
 
         this.query = Query.and(Player.getComponentType());
 
-        this.playersInPortal = new ArrayList<>();
+        this.playersInPortal = new ConcurrentHashMap<>();
+        this.playersWithGuiOpen = ConcurrentHashMap.newKeySet();
     }
 
     @Override
@@ -66,9 +76,20 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        if (this.playersInPortal.contains(playerReference.getUuid())) {
-            // Do not trigger multiple times while in a portal
+        UUID playerId = playerReference.getUuid();
+
+        if (this.playersWithGuiOpen.contains(playerId)) {
+            // Do not trigger if GUI is already open
             return;
+        }
+
+        if (this.playersInPortal.containsKey(playerId)) {
+            long lastTriggerTime = this.playersInPortal.get(playerId);
+
+            if (System.currentTimeMillis() - lastTriggerTime < 2000) {
+                // Do not trigger multiple times while in a portal or shortly after
+                return;
+            }
         }
 
         World playerWorld = player.getWorld();
@@ -95,10 +116,8 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        UUID playerId = playerReference.getUuid();
-
         // Player is in a portal, so add them to the list
-        this.playersInPortal.add(playerId);
+        this.playersInPortal.put(playerId, System.currentTimeMillis());
 
         Portal portal = optionalPortal.get();
 
@@ -119,50 +138,53 @@ public class EntryTickingSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
 
-        // @TODO If there are more than one portal, give the player a GUI to choose which portal to teleport to
-        Portal otherPortal = otherNetworkPortals.getFirst();
-        PortalDestination portalDestination = otherPortal.getDestination();
+        if (otherNetworkPortals.size() > 1) {
+            this.playersWithGuiOpen.add(playerId);
 
-        this.logger.atFine().log("Teleporting player to portal " + otherPortal.getName() + " (ID: " + otherPortal.getId() + ").");
-
-        Vector3d newPosition = new Vector3d(portalDestination.getX(), portalDestination.getY(), portalDestination.getZ());
-
-        Vector3f newHeadRotation = new Vector3f(0, 0, 0);
-        newHeadRotation.setYaw(portalDestination.getHeadYaw());
-        newHeadRotation.setPitch(portalDestination.getHeadPitch());
-
-        playerWorld.execute(() -> {
-            World destinationWorld = Universe.get().getWorld(otherPortal.getWorldId());
-
-            if (destinationWorld == null) {
-                playerReference.sendMessage(
-                        Message.raw("Destination world not found for portal " + otherPortal.getName()).color(Color.RED)
-                );
-
-                this.playersInPortal.remove(playerId);
-                return;
-            }
-
-            // Teleport player to destination
-            entityStore.putComponent(
+            this.portalTeleportPage.open(
+                    playerReference,
                     reference,
-                    Teleport.getComponentType(),
-                    Teleport.createForPlayer(
-                            destinationWorld,
-                            newPosition,
-                            newHeadRotation
-                    )
+                    entityStore,
+                    otherNetworkPortals,
+                    id -> {
+                        this.logger.atFine().log("Removing player " + id + " from in-portal list.");
+
+                        this.playersWithGuiOpen.remove(id);
+                        this.playersInPortal.remove(id);
+
+                        // Re-trigger immediately if they are still in a portal? No, let the cooldown handle it.
+                        // We put it back with the current time to ensure cooldown applies from dismissal time.
+                        this.playersInPortal.put(id, System.currentTimeMillis());
+                    }
             );
 
-            // Player no longer in the portal
-            this.playersInPortal.remove(playerId);
+            return;
+        }
 
-            playerReference.sendMessage(
-                    Message.raw("Teleported to " + otherPortal.getName() + "!").color(Color.GREEN)
-            );
+        Portal otherPortal = otherNetworkPortals.getFirst();
 
-            this.logger.atInfo().log("Player " + playerId + " has been teleported to portal " + otherPortal.getId() + ".");
-        });
+        this.portalTeleportationManager.teleportPlayerToPortal(
+                playerReference.getUuid(),
+                otherPortal.getId(),
+                id -> {
+                    playerReference.sendMessage(
+                            Message.raw("Destination world not found for portal " + otherPortal.getName()).color(Color.RED)
+                    );
+
+                    this.logger.atFine().log("Removing player " + playerId + " from in-portal list.");
+
+                    this.playersInPortal.remove(playerId);
+                },
+                id -> {
+                    this.logger.atFine().log("Removing player " + playerId + " from in-portal list.");
+
+                    this.playersInPortal.remove(playerId);
+
+                    // Re-trigger immediately if they are still in a portal? No, let the cooldown handle it.
+                    // We put it back with the current time to ensure cooldown applies from dismissal time.
+                    this.playersInPortal.put(playerId, System.currentTimeMillis());
+                }
+        );
     }
 
     @NullableDecl
