@@ -85,8 +85,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.59'
     implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
     // HyUI library for building Hytale-compatible user interfaces.
-    // Currently pointing to: HyUI-0.5.3-all.jar
-    implementation "curse.maven:hyui-1431415:7522546"
+    // Currently pointing to: HyUI-0.5.6-all.jar
+    implementation "curse.maven:hyui-1431415:7537692"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.0-M1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:6.1.0-M1'
